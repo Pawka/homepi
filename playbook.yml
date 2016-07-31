@@ -1,0 +1,12 @@
+---
+- hosts: raspberry
+  sudo: yes
+
+  vars:
+    nginx_listen_port: 80
+
+  tasks:
+    - name: Ensure python is installed.
+      apt: name=python state=installed
+    - name: Ensure git is installed.
+      apt: name=git state=installed
