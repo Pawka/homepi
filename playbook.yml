@@ -1,9 +1,8 @@
 ---
 - hosts: raspberry
   remote_user: pi
-
-  vars:
-    ugcal_path: /home/pi/ugcal
+  roles:
+    - ugcal
 
   tasks:
     - name: Install python
@@ -17,17 +16,3 @@
     - name: Install git
       apt: name=git state=installed
 
-    - name: Install ugcal
-      register: ugcalinstalled
-      git: repo=https://github.com/UsergroupsLT/ugcal.git
-           dest={{ ugcal_path }}
-
-    - name: Install ugcal requirements
-      when: pythoninstalled|success
-      pip:
-        requirements={{ ugcal_path }}/requirements.txt
-        virtualenv={{ ugcal_path }}/env
-
-    - name: Setup ugcal cron
-      when: ugcalinstalled|success
-      cron: name="run-ugcal-cron" user=pi minute="*/5" hour="*" job="pushd /home/pi/ugcal/; source env/bin/activate; python ugcal/ugcal.py; popd"

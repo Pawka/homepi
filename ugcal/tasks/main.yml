@@ -1,0 +1,14 @@
+---
+- name: Fetch ugcal
+  register: ugcalinstalled
+  git: repo={{ repository }}
+       dest={{ install_path }}
+
+- name: Install ugcal requirements
+  pip:
+    requirements={{ install_path }}/requirements.txt
+    virtualenv={{ install_path }}/env
+
+- name: Setup ugcal cron
+  when: ugcalinstalled|success
+  cron: name="run-ugcal-cron" user=pi minute="*/5" hour="*" job="pushd /home/pi/ugcal/; source env/bin/activate; python ugcal/ugcal.py; popd"
