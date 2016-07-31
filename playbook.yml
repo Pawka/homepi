@@ -3,7 +3,7 @@
   remote_user: pi
 
   vars:
-    nginx_listen_port: 80
+    ugcal_path: /home/pi/ugcal
 
   tasks:
     - name: Install python
@@ -20,13 +20,13 @@
     - name: Install ugcal
       register: ugcalinstalled
       git: repo=https://github.com/UsergroupsLT/ugcal.git
-           dest=/home/pi/ugcal
+           dest={{ ugcal_path }}
 
     - name: Install ugcal requirements
       when: pythoninstalled|success
       pip:
-        requirements=/home/pi/ugcal/requirements.txt
-        virtualenv=/home/pi/ugcal/env
+        requirements={{ ugcal_path }}/requirements.txt
+        virtualenv={{ ugcal_path }}/env
 
     - name: Setup ugcal cron
       when: ugcalinstalled|success
