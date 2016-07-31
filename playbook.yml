@@ -1,12 +1,33 @@
 ---
 - hosts: raspberry
-  sudo: yes
+  remote_user: pi
 
   vars:
     nginx_listen_port: 80
 
   tasks:
-    - name: Ensure python is installed.
-      apt: name=python state=installed
-    - name: Ensure git is installed.
+    - name: Install python
+      register: pythoninstalled
+      apt: name={{item}} state=installed
+      with_items:
+        - python
+        - python-pip
+        - virtualenv
+
+    - name: Install git
       apt: name=git state=installed
+
+    - name: Install ugcal
+      register: ugcalinstalled
+      git: repo=https://github.com/UsergroupsLT/ugcal.git
+           dest=/home/pi/ugcal
+
+    - name: Install ugcal requirements
+      when: pythoninstalled|success
+      pip:
+        requirements=/home/pi/ugcal/requirements.txt
+        virtualenv=/home/pi/ugcal/env
+
+    - name: Setup ugcal cron
+      when: ugcalinstalled|success
+      cron: name="run-ugcal-cron" user=pi minute="*/5" hour="*" job="pushd /home/pi/ugcal/; source env/bin/activate; python ugcal/ugcal.py; popd"
