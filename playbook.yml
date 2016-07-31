@@ -3,16 +3,4 @@
   remote_user: pi
   roles:
     - ugcal
-
-  tasks:
-    - name: Install python
-      register: pythoninstalled
-      apt: name={{item}} state=installed
-      with_items:
-        - python
-        - python-pip
-        - virtualenv
-
-    - name: Install git
-      apt: name=git state=installed
-
+    - common
