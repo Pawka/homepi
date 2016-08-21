@@ -1,6 +1,5 @@
 ---
 - name: Install python
-  register: pythoninstalled
   apt: name={{item}} state=installed
   with_items:
     - python

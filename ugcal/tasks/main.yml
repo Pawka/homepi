@@ -11,4 +11,4 @@
 
 - name: Setup ugcal cron
   when: ugcalinstalled|success
-  cron: name="run-ugcal-cron" user=pi minute="*/5" hour="*" job="pushd /home/pi/ugcal/; source env/bin/activate; python ugcal/ugcal.py; popd"
+  cron: name="run-ugcal-cron" user=pi minute="1" hour="*/4" job="cd {{ install_path }}; {{ install_path }}/env/bin/python -m ugcal.ugcal 2>&1 | logger"
