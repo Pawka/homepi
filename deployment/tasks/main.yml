@@ -13,4 +13,4 @@
     user: root
     minute: 30
     hour: "*"
-    job: "ansible-pull -d {{workdir}} -U {{repository}} playbook.yml -i {{workdir}}/../inventory"
+    job: "ansible-pull -d {{workdir}} -U {{repository}} playbook.yml -i {{workdir}}/../inventory >> /var/log/ansible.log"
