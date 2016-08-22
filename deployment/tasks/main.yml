@@ -1,4 +1,16 @@
+---
 - name: Install ansible
   apt: name=ansible state=installed
 - name: Create workdir
   file: path={{workdir}} state=directory mode=0700 owner=root group=root
+- name: Create inventory file
+  template:
+    src: inventory
+    dest: "{{workdir}}/../inventory"
+- name: Setup ansible cron
+  cron:
+    name: run-deployment-cron
+    user: root
+    minute: 30
+    hour: "*"
+    job: "ansible-pull -d {{workdir}} -U {{repository}} playbook.yml -i {{workdir}}/../inventory"

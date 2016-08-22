@@ -1,2 +1,3 @@
---
+---
 workdir: /var/lib/ansible/local
+repository: https://github.com/Pawka/homepi.git

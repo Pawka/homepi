@@ -1,6 +1,7 @@
 ---
-- hosts: raspberry
+- hosts: raspberrypi
   remote_user: pi
   roles:
-    - ugcal
     - common
+    - deployment
+    - ugcal
